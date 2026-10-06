@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>アイカツ！カードコレクション</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+        "Yu Gothic", sans-serif;
+      background: #fff7fb;
+      color: #4a3943;
+    }
+
+    header {
+      background: linear-gradient(135deg, #ffb6d9, #dcb8ff);
+      color: white;
+      padding: 24px 16px;
+      text-align: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      font-size: 13px;
+    }
+
+    main {
+      max-width: 900px;
+      margin: auto;
+      padding: 16px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat {
+      background: white;
+      border-radius: 16px;
+      padding: 14px 8px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 20px;
+      color: #d978aa;
+    }
+
+    .stat span {
+      font-size: 11px;
+    }
+
+    .panel {
+      background: white;
+      border-radius: 18px;
+      padding: 16px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .panel h2 {
+      margin-top: 0;
+      font-size: 18px;
+    }
+
+    input,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    select {
+      width: 100%;
+      padding: 11px;
+      border: 1px solid #ead5e1;
+      border-radius: 12px;
+      background: #fffafd;
+      margin-bottom: 10px;
+    }
+
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 10px 14px;
+      cursor: pointer;
+    }
+
+    .primary {
+      width: 100%;
+      background: #e89bc2;
+      color: white;
+      font-weight: bold;
+    }
+
+    .filters {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .card-image {
+      width: 100%;
+      aspect-ratio: 2 / 3;
+      background: #f4edf2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #a994a0;
+      font-size: 13px;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .card-info {
+      padding: 12px;
+    }
+
+    .card-name {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      background: #f5e7f0;
+      color: #866477;
+      border-radius: 999px;
+      padding: 4px 7px;
+      font-size: 10px;
+    }
+
+    .quantity {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .quantity button {
+      width: 34px;
+      height: 34px;
+      padding: 0;
+      background: #f1d8e7;
+      color: #704f62;
+      font-size: 18px;
+    }
+
+    .quantity strong {
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .empty {
+      text-align: center;
+      color: #a18d98;
+      padding: 30px 10px;
+    }
+
+    @media (min-width: 700px) {
+      .cards {
+        grid-template-columns: repeat(4, 1fr);
+      }
+
+      .filters {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>🌸 アイカツ！カードコレクション</h1>
+  <p>あなたのカードコレクションを管理しよう♡</p>
+</header>
+
+<main>
+
+  <section class="stats">
+    <div class="stat">
+      <strong id="cardTypes">0</strong>
+      <span>登録カード種類</span>
+    </div>
+
+    <div class="stat">
+      <strong id="totalCards">0</strong>
+      <span>総所持枚数</span>
+    </div>
+
+    <div class="stat">
+      <strong id="ownedRate">0%</strong>
+      <span>所持率</span>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>➕ カードを登録</h2>
+
+    <input id="cardName" type="text" placeholder="カード名">
+
+    <div class="filters">
+      <select id="cardSeries">
+        <option value="">弾数</option>
+        <option>第1弾</option>
+        <option>第2弾</option>
+        <option>第3弾</option>
+      </select>
+
+      <select id="cardType">
+        <option value="">タイプ</option>
+        <option>キュート</option>
+        <option>クール</option>
+        <option>セクシー</option>
+        <option>ポップ</option>
+      </select>
+
+      <select id="cardBrand">
+        <option value="">ブランド</option>
+        <option>Angely Sugar</option>
+        <option>Futuristic Girls</option>
+        <option>Spicy Ageha</option>
+        <option>Love Moonrise</option>
+        <option>Happy Rainbow</option>
+      </select>
+
+      <select id="cardRarity">
+        <option value="">レア度</option>
+        <option value="ER">ER</option>
+        <option value="PR">PR</option>
+        <option value="R">R</option>
+        <option value="N">N</option>
+      </select>
+    </div>
+
+    <select id="cardKind">
+      <option value="通常">通常</option>
+      <option value="プロモ">プロモ</option>
+    </select>
+
+    <button class="primary" onclick="addCard()">
+      カードを登録する ♡
+    </button>
+  </section>
+
+  <section class="panel">
+    <h2>🔎 カードを検索</h2>
+
+    <input
+      id="search"
+      type="text"
+      placeholder="カード名・ブランドなどで検索"
+      oninput="renderCards()"
+    >
+
+    <div class="filters">
+      <select id="filterSeries" onchange="renderCards()">
+        <option value="">すべての弾</option>
+        <option>第1弾</option>
+        <option>第2弾</option>
+        <option>第3弾</option>
+      </select>
+
+      <select id="filterType" onchange="renderCards()">
+        <option value="">すべてのタイプ</option>
+        <option>キュート</option>
+        <option>クール</option>
+        <option>セクシー</option>
+        <option>ポップ</option>
+      </select>
+
+      <select id="filterBrand" onchange="renderCards()">
+        <option value="">すべてのブランド</option>
+        <option>Angely Sugar</option>
+        <option>Futuristic Girls</option>
+        <option>Spicy Ageha</option>
+        <option>Love Moonrise</option>
+        <option>Happy Rainbow</option>
+      </select>
+
+      <select id="filterRarity" onchange="renderCards()">
+        <option value="">すべてのレア度</option>
+        <option value="ER">ER</option>
+        <option value="PR">PR</option>
+        <option value="R">R</option>
+        <option value="N">N</option>
+      </select>
+    </div>
+  </section>
+
+  <section class="panel">
+    <h2>🃏 カード一覧</h2>
+    <div id="cardList" class="cards"></div>
+  </section>
+
+</main>
+
+<script>
+
+  let cards = JSON.parse(
+    localStorage.getItem("aikatsuCards") || "[]"
+  );
+
+  // レア度の並び順
+  const rarityOrder = {
+    ER: 1,
+    PR: 2,
+    R: 3,
+    N: 4
+  };
+
+  function saveCards() {
+    localStorage.setItem(
+      "aikatsuCards",
+      JSON.stringify(cards)
+    );
+  }
+
+  function addCard() {
+
+    const name =
+      document.getElementById("cardName").value.trim();
+
+    if (!name) {
+      alert("カード名を入力してね！");
+      return;
+    }
+
+    const card = {
+      id: Date.now(),
+
+      name: name,
+
+      series:
+        document.getElementById("cardSeries").value,
+
+      type:
+        document.getElementById("cardType").value,
+
+      brand:
+        document.getElementById("cardBrand").value,
+
+      rarity:
+        document.getElementById("cardRarity").value,
+
+      kind:
+        document.getElementById("cardKind").value,
+
+      quantity: 0
+    };
+
+    cards.push(card);
+
+    saveCards();
+
+    document.getElementById("cardName").value = "";
+
+    renderCards();
+  }
+
+  function changeQuantity(id, amount) {
+
+    const card = cards.find(
+      card => card.id === id
+    );
+
+    if (!card) return;
+
+    card.quantity += amount;
+
+    if (card.quantity < 0) {
+      card.quantity = 0;
+    }
+
+    saveCards();
+
+    renderCards();
+  }
+
+  function renderCards() {
+
+    const list =
+      document.getElementById("cardList");
+
+    const search =
+      document.getElementById("search")
+        .value
+        .toLowerCase();
+
+    const series =
+      document.getElementById("filterSeries").value;
+
+    const type =
+      document.getElementById("filterType").value;
+
+    const brand =
+      document.getElementById("filterBrand").value;
+
+    const rarity =
+      document.getElementById("filterRarity").value;
+
+    let filtered =
+      cards.filter(card => {
+
+        const text =
+          (
+            card.name +
+            card.series +
+            card.type +
+            card.brand +
+            card.rarity +
+            card.kind
+          ).toLowerCase();
+
+        return (
+          text.includes(search) &&
+          (!series || card.series === series) &&
+          (!type || card.type === type) &&
+          (!brand || card.brand === brand) &&
+          (!rarity || card.rarity === rarity)
+        );
+      });
+
+    filtered.sort(
+      (a, b) =>
+        (rarityOrder[a.rarity] || 99) -
+        (rarityOrder[b.rarity] || 99)
+    );
+
+    if (filtered.length === 0) {
+
+      list.innerHTML =
+        '<div class="empty">まだカードが登録されていません♡</div>';
+
+    } else {
+
+      list.innerHTML =
+        filtered.map(card => `
+
+          <div class="card">
+
+            <div class="card-image">
+              📷<br>
+              カード画像
+            </div>
+
+            <div class="card-info">
+
+              <div class="card-name">
+                ${escapeHTML(card.name)}
+              </div>
+
+              <div class="tags">
+
+                ${card.rarity
+                  ? `<span class="tag">✨ ${card.rarity}</span>`
+                  : ""}
+
+                ${card.series
+                  ? `<span class="tag">🗂️ ${card.series}</span>`
+                  : ""}
+
+                ${card.type
+                  ? `<span class="tag">🎀 ${card.type}</span>`
+                  : ""}
+
+                ${card.brand
+                  ? `<span class="tag">🏷️ ${card.brand}</span>`
+                  : ""}
+
+       
