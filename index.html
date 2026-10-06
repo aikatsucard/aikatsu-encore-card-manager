@@ -1,509 +1,741 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>アイカツ！カードコレクション</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>アイカツ！カードコレクション</title>
 
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
-        "Yu Gothic", sans-serif;
-      background: #fff7fb;
-      color: #4a3943;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    header {
-      background: linear-gradient(135deg, #ffb6d9, #dcb8ff);
-      color: white;
-      padding: 24px 16px;
-      text-align: center;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-    }
+body {
+  margin: 0;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Hiragino Sans",
+    "Yu Gothic",
+    sans-serif;
 
-    header h1 {
-      margin: 0;
-      font-size: 24px;
-    }
+  background: #fff7fb;
+  color: #4a3943;
+}
 
-    header p {
-      margin: 8px 0 0;
-      font-size: 13px;
-    }
+header {
+  background: linear-gradient(135deg, #ffb6d9, #dcb8ff);
+  color: white;
+  padding: 24px 16px;
+  text-align: center;
+}
 
-    main {
-      max-width: 900px;
-      margin: auto;
-      padding: 16px;
-    }
+header h1 {
+  margin: 0;
+  font-size: 23px;
+}
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 16px;
-    }
+header p {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
 
-    .stat {
-      background: white;
-      border-radius: 16px;
-      padding: 14px 8px;
-      text-align: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
+main {
+  max-width: 900px;
+  margin: auto;
+  padding: 16px;
+}
 
-    .stat strong {
-      display: block;
-      font-size: 20px;
-      color: #d978aa;
-    }
+.panel {
+  background: white;
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
 
-    .stat span {
-      font-size: 11px;
-    }
+.panel h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
 
-    .panel {
-      background: white;
-      border-radius: 18px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
+input,
+select,
+button {
+  font: inherit;
+}
 
-    .panel h2 {
-      margin-top: 0;
-      font-size: 18px;
-    }
+input,
+select {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #ead5e1;
+  border-radius: 12px;
+  background: #fffafd;
+  margin-bottom: 10px;
+}
 
-    input,
-    select,
-    button {
-      font: inherit;
-    }
+button {
+  border: none;
+  border-radius: 12px;
+  padding: 10px 14px;
+}
 
-    input,
-    select {
-      width: 100%;
-      padding: 11px;
-      border: 1px solid #ead5e1;
-      border-radius: 12px;
-      background: #fffafd;
-      margin-bottom: 10px;
-    }
+.primary {
+  width: 100%;
+  background: #e89bc2;
+  color: white;
+  font-weight: bold;
+}
 
-    button {
-      border: none;
-      border-radius: 12px;
-      padding: 10px 14px;
-      cursor: pointer;
-    }
+.image-preview {
+  width: 150px;
+  height: 210px;
+  margin: 10px auto;
+  border-radius: 12px;
+  background: #f4edf2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #a994a0;
+  text-align: center;
+}
 
-    .primary {
-      width: 100%;
-      background: #e89bc2;
-      color: white;
-      font-weight: bold;
-    }
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    .filters {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
 
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
+.card {
+  background: white;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
 
-    .card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
+.card-image {
+  width: 100%;
+  aspect-ratio: 2 / 3;
+  background: #f4edf2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  color: #a994a0;
+}
 
-    .card-image {
-      width: 100%;
-      aspect-ratio: 2 / 3;
-      background: #f4edf2;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #a994a0;
-      font-size: 13px;
-      text-align: center;
-      padding: 10px;
-    }
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 
-    .card-info {
-      padding: 12px;
-    }
+.card-info {
+  padding: 12px;
+}
 
-    .card-name {
-      font-weight: bold;
-      margin-bottom: 6px;
-    }
+.card-name {
+  font-weight: bold;
+  margin-bottom: 7px;
+}
 
-    .tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-bottom: 8px;
-    }
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
 
-    .tag {
-      background: #f5e7f0;
-      color: #866477;
-      border-radius: 999px;
-      padding: 4px 7px;
-      font-size: 10px;
-    }
+.tag {
+  background: #f5e7f0;
+  color: #866477;
+  border-radius: 999px;
+  padding: 4px 7px;
+  font-size: 10px;
+}
 
-    .quantity {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      margin-top: 8px;
-    }
+.quantity {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+}
 
-    .quantity button {
-      width: 34px;
-      height: 34px;
-      padding: 0;
-      background: #f1d8e7;
-      color: #704f62;
-      font-size: 18px;
-    }
+.quantity button {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  background: #f1d8e7;
+  font-size: 18px;
+}
 
-    .quantity strong {
-      min-width: 30px;
-      text-align: center;
-    }
+.quantity strong {
+  min-width: 35px;
+  text-align: center;
+}
 
-    .empty {
-      text-align: center;
-      color: #a18d98;
-      padding: 30px 10px;
-    }
+.empty {
+  text-align: center;
+  color: #a18d98;
+  padding: 30px 10px;
+}
 
-    @media (min-width: 700px) {
-      .cards {
-        grid-template-columns: repeat(4, 1fr);
-      }
-
-      .filters {
-        grid-template-columns: repeat(4, 1fr);
-      }
-    }
-  </style>
+@media (min-width: 700px) {
+  .cards {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>🌸 アイカツ！カードコレクション</h1>
-  <p>あなたのカードコレクションを管理しよう♡</p>
+  <h1>🎀アイカツ！カードコレクション</h1>
+  <p>カードコレクションを管理しよう♡</p>
 </header>
 
 <main>
 
-  <section class="stats">
-    <div class="stat">
-      <strong id="cardTypes">0</strong>
-      <span>登録カード種類</span>
-    </div>
+<section class="panel">
 
-    <div class="stat">
-      <strong id="totalCards">0</strong>
-      <span>総所持枚数</span>
-    </div>
+<h2>➕ カードを登録</h2>
 
-    <div class="stat">
-      <strong id="ownedRate">0%</strong>
-      <span>所持率</span>
-    </div>
-  </section>
+<label>📷 カード画像</label>
 
-  <section class="panel">
-    <h2>➕ カードを登録</h2>
+<input
+  id="cardImage"
+  type="file"
+  accept="image/*"
+  onchange="previewImage()"
+>
 
-    <input id="cardName" type="text" placeholder="カード名">
+<div class="image-preview" id="imagePreview">
+  画像を選択してね♡
+</div>
 
-    <div class="filters">
-      <select id="cardSeries">
-        <option value="">弾数</option>
-        <option>第1弾</option>
-        <option>第2弾</option>
-        <option>第3弾</option>
-      </select>
+<input
+  id="cardName"
+  type="text"
+  placeholder="カード名"
+>
 
-      <select id="cardType">
-        <option value="">タイプ</option>
-        <option>キュート</option>
-        <option>クール</option>
-        <option>セクシー</option>
-        <option>ポップ</option>
-      </select>
+<select id="cardSeries">
+  <option value="第1弾">第1弾</option>
+  <option value="第2弾">第2弾</option>
+  <option value="第3弾">第3弾</option>
+</select>
 
-      <select id="cardBrand">
-        <option value="">ブランド</option>
-        <option>Angely Sugar</option>
-        <option>Futuristic Girls</option>
-        <option>Spicy Ageha</option>
-        <option>Love Moonrise</option>
-        <option>Happy Rainbow</option>
-      </select>
+<select id="cardKind">
+  <option value="通常">通常</option>
+  <option value="プロモ">プロモ</option>
+</select>
 
-      <select id="cardRarity">
-        <option value="">レア度</option>
-        <option value="ER">ER</option>
-        <option value="PR">PR</option>
-        <option value="R">R</option>
-        <option value="N">N</option>
-      </select>
-    </div>
+<select id="cardType">
+  <option value="">タイプを選択</option>
+  <option value="キュート">キュート</option>
+  <option value="クール">クール</option>
+  <option value="セクシー">セクシー</option>
+  <option value="ポップ">ポップ</option>
+</select>
 
-    <select id="cardKind">
-      <option value="通常">通常</option>
-      <option value="プロモ">プロモ</option>
-    </select>
+<select id="cardBrand">
+  <option value="">ブランドを選択</option>
 
-    <button class="primary" onclick="addCard()">
-      カードを登録する ♡
-    </button>
-  </section>
+  <option value="Dreamy Crowm">
+    Dreamy Crowm
+  </option>
 
-  <section class="panel">
-    <h2>🔎 カードを検索</h2>
+  <option value="Maple Ribbon">
+    Maple Ribbon
+  </option>
 
-    <input
-      id="search"
-      type="text"
-      placeholder="カード名・ブランドなどで検索"
-      oninput="renderCards()"
-    >
+  <option value="Angery Sugar">
+    Angery Sugar
+  </option>
 
-    <div class="filters">
-      <select id="filterSeries" onchange="renderCards()">
-        <option value="">すべての弾</option>
-        <option>第1弾</option>
-        <option>第2弾</option>
-        <option>第3弾</option>
-      </select>
+  <option value="FUTURING GIRL">
+    FUTURING GIRL
+  </option>
 
-      <select id="filterType" onchange="renderCards()">
-        <option value="">すべてのタイプ</option>
-        <option>キュート</option>
-        <option>クール</option>
-        <option>セクシー</option>
-        <option>ポップ</option>
-      </select>
+  <option value="SPICY AGEHA">
+    SPICY AGEHA
+  </option>
 
-      <select id="filterBrand" onchange="renderCards()">
-        <option value="">すべてのブランド</option>
-        <option>Angely Sugar</option>
-        <option>Futuristic Girls</option>
-        <option>Spicy Ageha</option>
-        <option>Love Moonrise</option>
-        <option>Happy Rainbow</option>
-      </select>
+  <option value="その他">
+    その他
+  </option>
+</select>
 
-      <select id="filterRarity" onchange="renderCards()">
-        <option value="">すべてのレア度</option>
-        <option value="ER">ER</option>
-        <option value="PR">PR</option>
-        <option value="R">R</option>
-        <option value="N">N</option>
-      </select>
-    </div>
-  </section>
+<select id="cardRarity">
 
-  <section class="panel">
-    <h2>🃏 カード一覧</h2>
-    <div id="cardList" class="cards"></div>
-  </section>
+  <option value="">
+    レア度を選択
+  </option>
+
+  <option value="ER">
+    ✨ ER
+  </option>
+
+  <option value="PR">
+    💗 PR
+  </option>
+
+  <option value="R">
+    🌟 R
+  </option>
+
+  <option value="N">
+    🤍 N
+  </option>
+
+</select>
+
+<button
+  class="primary"
+  onclick="addCard()"
+>
+カードを登録する ♡
+</button>
+
+</section>
+
+
+<section class="panel">
+
+<h2>🔎 カードを検索</h2>
+
+<input
+  id="search"
+  type="text"
+  placeholder="カード名・ブランドなどで検索"
+  oninput="renderCards()"
+>
+
+<select
+  id="filterBrand"
+  onchange="renderCards()"
+>
+
+<option value="">
+すべてのブランド
+</option>
+
+<option>Dreamy Crowm</option>
+<option>Maple Ribbon</option>
+<option>Angery Sugar</option>
+<option>FUTURING GIRL</option>
+<option>SPICY AGEHA</option>
+<option>その他</option>
+
+</select>
+
+<select
+  id="filterRarity"
+  onchange="renderCards()"
+>
+
+<option value="">
+すべてのレア度
+</option>
+
+<option value="ER">ER</option>
+<option value="PR">PR</option>
+<option value="R">R</option>
+<option value="N">N</option>
+
+</select>
+
+</section>
+
+
+<section class="panel">
+
+<h2>🃏 カード一覧</h2>
+
+<div
+  id="cardList"
+  class="cards"
+></div>
+
+</section>
 
 </main>
 
+
 <script>
 
-  let cards = JSON.parse(
-    localStorage.getItem("aikatsuCards") || "[]"
-  );
+let cards = JSON.parse(
+  localStorage.getItem("aikatsuCards") || "[]"
+);
 
-  // レア度の並び順
-  const rarityOrder = {
-    ER: 1,
-    PR: 2,
-    R: 3,
-    N: 4
+let selectedImage = "";
+
+
+/* レア度の順番 */
+
+const rarityOrder = {
+  ER: 1,
+  PR: 2,
+  R: 3,
+  N: 4
+};
+
+
+/* 画像を選んだとき */
+
+function previewImage() {
+
+  const file =
+    document.getElementById("cardImage")
+      .files[0];
+
+  if (!file) return;
+
+  const reader =
+    new FileReader();
+
+  reader.onload = function(e) {
+
+    selectedImage =
+      e.target.result;
+
+    document.getElementById(
+      "imagePreview"
+    ).innerHTML =
+      `<img src="${selectedImage}">`;
   };
 
-  function saveCards() {
-    localStorage.setItem(
-      "aikatsuCards",
-      JSON.stringify(cards)
-    );
-  }
+  reader.readAsDataURL(file);
+}
 
-  function addCard() {
 
-    const name =
-      document.getElementById("cardName").value.trim();
+/* 保存 */
 
-    if (!name) {
-      alert("カード名を入力してね！");
-      return;
-    }
+function saveCards() {
 
-    const card = {
-      id: Date.now(),
+  localStorage.setItem(
+    "aikatsuCards",
+    JSON.stringify(cards)
+  );
+}
 
-      name: name,
 
-      series:
-        document.getElementById("cardSeries").value,
+/* カード登録 */
 
-      type:
-        document.getElementById("cardType").value,
+function addCard() {
 
-      brand:
-        document.getElementById("cardBrand").value,
+  const name =
+    document
+      .getElementById("cardName")
+      .value
+      .trim();
 
-      rarity:
-        document.getElementById("cardRarity").value,
+  if (!name) {
 
-      kind:
-        document.getElementById("cardKind").value,
-
-      quantity: 0
-    };
-
-    cards.push(card);
-
-    saveCards();
-
-    document.getElementById("cardName").value = "";
-
-    renderCards();
-  }
-
-  function changeQuantity(id, amount) {
-
-    const card = cards.find(
-      card => card.id === id
+    alert(
+      "カード名を入力してね！"
     );
 
-    if (!card) return;
-
-    card.quantity += amount;
-
-    if (card.quantity < 0) {
-      card.quantity = 0;
-    }
-
-    saveCards();
-
-    renderCards();
+    return;
   }
 
-  function renderCards() {
 
-    const list =
-      document.getElementById("cardList");
+  const card = {
 
-    const search =
-      document.getElementById("search")
-        .value
-        .toLowerCase();
+    id: Date.now(),
 
-    const series =
-      document.getElementById("filterSeries").value;
+    name: name,
 
-    const type =
-      document.getElementById("filterType").value;
+    series:
+      document
+        .getElementById("cardSeries")
+        .value,
 
-    const brand =
-      document.getElementById("filterBrand").value;
+    kind:
+      document
+        .getElementById("cardKind")
+        .value,
 
-    const rarity =
-      document.getElementById("filterRarity").value;
+    type:
+      document
+        .getElementById("cardType")
+        .value,
 
-    let filtered =
-      cards.filter(card => {
+    brand:
+      document
+        .getElementById("cardBrand")
+        .value,
 
-        const text =
-          (
-            card.name +
-            card.series +
-            card.type +
-            card.brand +
-            card.rarity +
-            card.kind
-          ).toLowerCase();
+    rarity:
+      document
+        .getElementById("cardRarity")
+        .value,
 
-        return (
-          text.includes(search) &&
-          (!series || card.series === series) &&
-          (!type || card.type === type) &&
-          (!brand || card.brand === brand) &&
-          (!rarity || card.rarity === rarity)
-        );
-      });
+    image:
+      selectedImage,
 
-    filtered.sort(
-      (a, b) =>
-        (rarityOrder[a.rarity] || 99) -
-        (rarityOrder[b.rarity] || 99)
+    quantity: 0
+  };
+
+
+  cards.push(card);
+
+  saveCards();
+
+
+  document
+    .getElementById("cardName")
+    .value = "";
+
+  document
+    .getElementById("cardImage")
+    .value = "";
+
+  selectedImage = "";
+
+  document.getElementById(
+    "imagePreview"
+  ).innerHTML =
+    "画像を選択してね♡";
+
+
+  renderCards();
+}
+
+
+/* 所持数変更 */
+
+function changeQuantity(
+  id,
+  amount
+) {
+
+  const card =
+    cards.find(
+      c => c.id === id
     );
 
-    if (filtered.length === 0) {
+  if (!card) return;
 
-      list.innerHTML =
-        '<div class="empty">まだカードが登録されていません♡</div>';
+  card.quantity += amount;
 
-    } else {
+  if (card.quantity < 0) {
+    card.quantity = 0;
+  }
 
-      list.innerHTML =
-        filtered.map(card => `
+  saveCards();
 
-          <div class="card">
+  renderCards();
+}
 
-            <div class="card-image">
-              📷<br>
-              カード画像
-            </div>
 
-            <div class="card-info">
+/* カード一覧 */
 
-              <div class="card-name">
-                ${escapeHTML(card.name)}
-              </div>
+function renderCards() {
 
-              <div class="tags">
+  const list =
+    document.getElementById(
+      "cardList"
+    );
 
-                ${card.rarity
-                  ? `<span class="tag">✨ ${card.rarity}</span>`
-                  : ""}
 
-                ${card.series
-                  ? `<span class="tag">🗂️ ${card.series}</span>`
-                  : ""}
+  const search =
+    document
+      .getElementById("search")
+      .value
+      .toLowerCase();
 
-                ${card.type
-                  ? `<span class="tag">🎀 ${card.type}</span>`
-                  : ""}
 
-                ${card.brand
-                  ? `<span class="tag">🏷️ ${card.brand}</span>`
-                  : ""}
+  const brand =
+    document
+      .getElementById("filterBrand")
+      .value;
 
-       
+
+  const rarity =
+    document
+      .getElementById("filterRarity")
+      .value;
+
+
+  let filtered =
+    cards.filter(card => {
+
+      const text =
+        (
+          card.name +
+          card.series +
+          card.kind +
+          card.type +
+          card.brand +
+          card.rarity
+        ).toLowerCase();
+
+
+      return (
+
+        text.includes(search) &&
+
+        (
+          !brand ||
+          card.brand === brand
+        ) &&
+
+        (
+          !rarity ||
+          card.rarity === rarity
+        )
+
+      );
+
+    });
+
+
+  /* ER → PR → R → N */
+
+  filtered.sort(
+    (a, b) =>
+      (rarityOrder[a.rarity] || 99) -
+      (rarityOrder[b.rarity] || 99)
+  );
+
+
+  if (
+    filtered.length === 0
+  ) {
+
+    list.innerHTML =
+      `
+      <div class="empty">
+        まだカードが登録されていません♡
+      </div>
+      `;
+
+    return;
+  }
+
+
+  list.innerHTML =
+    filtered.map(card => `
+
+      <div class="card">
+
+        <div class="card-image">
+
+          ${
+            card.image
+
+            ?
+
+            `<img src="${card.image}">`
+
+            :
+
+            `📷<br>画像なし`
+          }
+
+        </div>
+
+
+        <div class="card-info">
+
+          <div class="card-name">
+
+            ${escapeHTML(
+              card.name
+            )}
+
+          </div>
+
+
+          <div class="tags">
+
+            ${
+              card.rarity
+              ?
+              `<span class="tag">
+                ✨ ${card.rarity}
+              </span>`
+              :
+              ""
+            }
+
+
+            ${
+              card.series
+              ?
+              `<span class="tag">
+                🗂️ ${card.series}
+              </span>`
+              :
+              ""
+            }
+
+
+            ${
+              card.type
+              ?
+              `<span class="tag">
+                🎀 ${card.type}
+              </span>`
+              :
+              ""
+            }
+
+
+            ${
+              card.brand
+              ?
+              `<span class="tag">
+                🏷️ ${card.brand}
+              </span>`
+              :
+              ""
+            }
+
+
+            <span class="tag">
+              ${card.kind}
+            </span>
+
+          </div>
+
+
+          <div class="quantity">
+
+            <button
+              onclick="changeQuantity(
+                ${card.id},
+                -1
+              )"
+            >
+              −
+            </button>
+
+
+            <strong>
+              ${card.quantity}枚
+            </strong>
+
+
+            <button
+              onclick="changeQuantity(
+                ${card.id},
+                1
+              )"
+            >
+              ＋
+            </button>
+
+          </div>
+
+   
