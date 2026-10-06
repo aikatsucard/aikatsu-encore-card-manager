@@ -413,11 +413,20 @@ let selectedImage = "";
 
 function showScreen(screenId) {
 
-  document.querySelectorAll(".screen").forEach(screen => {
+  const screens = document.querySelectorAll(".screen");
+
+  screens.forEach(function(screen) {
     screen.classList.remove("active");
   });
 
-  document.getElementById(screenId).classList.add("active");
+  const targetScreen = document.getElementById(screenId);
+
+  if (!targetScreen) {
+    alert("画面が見つかりませんでした");
+    return;
+  }
+
+  targetScreen.classList.add("active");
 
   if (screenId === "listScreen") {
     displayCards();
