@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>アイカツ！カードコレクション</title>
+<title>アイカツ！カード管理</title>
 
 <style>
 * {
@@ -13,103 +13,97 @@
 
 body {
   margin: 0;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Hiragino Sans",
-    "Yu Gothic",
-    sans-serif;
-
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans",
+    "Yu Gothic", sans-serif;
   background: #fff7fb;
-  color: #4a3943;
+  color: #555;
 }
 
 header {
-  background: linear-gradient(135deg, #ffb6d9, #dcb8ff);
+  background: #ffb7d5;
   color: white;
-  padding: 24px 16px;
   text-align: center;
+  padding: 18px 10px;
+  font-size: 22px;
+  font-weight: bold;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 23px;
-}
-
-header p {
-  margin: 8px 0 0;
-  font-size: 13px;
-}
-
-main {
-  max-width: 900px;
+.screen {
+  display: none;
+  padding: 16px;
+  max-width: 700px;
   margin: auto;
-  padding: 16px;
 }
 
-.panel {
+.screen.active {
+  display: block;
+}
+
+h2 {
+  margin-top: 8px;
+  color: #e58bad;
+}
+
+.search-box {
   background: white;
-  border-radius: 18px;
   padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin-bottom: 18px;
 }
 
-.panel h2 {
-  margin-top: 0;
-  font-size: 18px;
-}
-
-input,
-select,
-button {
-  font: inherit;
-}
-
-input,
-select {
+.search-box input,
+.search-box select,
+.form-box input,
+.form-box select {
   width: 100%;
   padding: 11px;
-  border: 1px solid #ead5e1;
-  border-radius: 12px;
-  background: #fffafd;
   margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  background: white;
+  font-size: 15px;
+}
+
+.search-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #d9799d;
 }
 
 button {
   border: none;
-  border-radius: 12px;
+  border-radius: 10px;
   padding: 10px 14px;
+  font-size: 14px;
+  cursor: pointer;
 }
 
-.primary {
+.main-button {
   width: 100%;
-  background: #e89bc2;
+  background: #ff9fc5;
   color: white;
   font-weight: bold;
+  padding: 14px;
+  font-size: 16px;
+  margin-bottom: 12px;
 }
 
-.image-preview {
-  width: 150px;
-  height: 210px;
-  margin: 10px auto;
-  border-radius: 12px;
-  background: #f4edf2;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  color: #a994a0;
-  text-align: center;
+.back-button {
+  background: #ddd;
+  color: #666;
+  margin-bottom: 15px;
 }
 
-.image-preview img {
+.add-button {
+  background: #ff9fc5;
+  color: white;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  font-weight: bold;
+  margin-bottom: 15px;
 }
 
-.cards {
+.card-list {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 12px;
@@ -117,55 +111,58 @@ button {
 
 .card {
   background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 10px;
+  box-shadow: 0 2px 7px rgba(0,0,0,0.08);
+  transition: 0.2s;
+}
+
+.card.not-owned {
+  background: #eeeeee;
+  filter: grayscale(1);
+  opacity: 0.6;
 }
 
 .card-image {
   width: 100%;
-  aspect-ratio: 2 / 3;
-  background: #f4edf2;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #f1f1f1;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.no-image {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  border-radius: 10px;
+  background: #eee;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  color: #a994a0;
-}
-
-.card-image img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.card-info {
-  padding: 12px;
+  color: #aaa;
+  margin-bottom: 8px;
+  font-size: 13px;
 }
 
 .card-name {
   font-weight: bold;
-  margin-bottom: 7px;
+  color: #555;
+  margin-bottom: 5px;
 }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-}
-
-.tag {
-  background: #f5e7f0;
-  color: #866477;
-  border-radius: 999px;
-  padding: 4px 7px;
-  font-size: 10px;
+.card-info {
+  font-size: 12px;
+  color: #888;
+  line-height: 1.6;
 }
 
 .quantity {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 12px;
   margin-top: 10px;
 }
 
@@ -173,24 +170,56 @@ button {
   width: 34px;
   height: 34px;
   padding: 0;
-  background: #f1d8e7;
-  font-size: 18px;
+  border-radius: 50%;
+  background: #ffb7d5;
+  color: white;
+  font-size: 20px;
 }
 
-.quantity strong {
-  min-width: 35px;
+.quantity-number {
+  font-weight: bold;
+  min-width: 25px;
   text-align: center;
+}
+
+.form-box {
+  background: white;
+  padding: 16px;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.form-box label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #777;
+}
+
+.preview {
+  width: 150px;
+  max-width: 100%;
+  border-radius: 10px;
+  margin: 5px auto 15px;
+  display: none;
 }
 
 .empty {
   text-align: center;
-  color: #a18d98;
+  color: #aaa;
   padding: 30px 10px;
 }
 
-@media (min-width: 700px) {
-  .cards {
-    grid-template-columns: repeat(4, 1fr);
+.count {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 10px;
+}
+
+@media (min-width: 600px) {
+  .card-list {
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 </style>
@@ -199,255 +228,248 @@ button {
 <body>
 
 <header>
-  <h1>🎀アイカツ！カードコレクション</h1>
-  <p>カードコレクションを管理しよう♡</p>
+  💗 アイカツ！カード管理 💗
 </header>
 
-<main>
+<!-- ========================= -->
+<!-- 検索画面 -->
+<!-- ========================= -->
 
-<section class="panel">
+<div id="searchScreen" class="screen active">
 
-<h2>➕ カードを登録</h2>
+  <div class="search-box">
 
-<label>📷 カード画像</label>
+    <div class="search-title">🔎 カード検索</div>
 
-<input
-  id="cardImage"
-  type="file"
-  accept="image/*"
-  onchange="previewImage()"
->
+    <input
+      type="text"
+      id="searchName"
+      placeholder="カード名を検索"
+      oninput="displayCards()"
+    >
 
-<div class="image-preview" id="imagePreview">
-  画像を選択してね♡
+    <!-- 弾 -->
+    <select id="searchSeries" onchange="displayCards()">
+      <option value="">弾：すべて</option>
+      <option value="第1弾">第1弾</option>
+    </select>
+
+    <!-- 通常・プロモ -->
+    <select id="searchKind" onchange="displayCards()">
+      <option value="">通常orプロモ：すべて</option>
+      <option value="通常">通常</option>
+      <option value="プロモ">プロモ</option>
+    </select>
+
+    <!-- レア度 -->
+    <select id="searchRarity" onchange="displayCards()">
+      <option value="">レア度：すべて</option>
+      <option value="ER">ER</option>
+      <option value="PR">PR</option>
+      <option value="R">R</option>
+      <option value="N">N</option>
+    </select>
+
+    <!-- タイプ -->
+    <select id="searchType" onchange="displayCards()">
+      <option value="">タイプ：すべて</option>
+      <option value="キュート">キュート</option>
+      <option value="クール">クール</option>
+      <option value="セクシー">セクシー</option>
+      <option value="ポップ">ポップ</option>
+    </select>
+
+    <!-- ブランド -->
+    <select id="searchBrand" onchange="displayCards()">
+      <option value="">ブランド：すべて</option>
+      <option value="Dreamy Crowm">Dreamy Crowm</option>
+      <option value="Maple Ribbon">Maple Ribbon</option>
+      <option value="Angery Sugar">Angery Sugar</option>
+      <option value="FUTURING GIRL">FUTURING GIRL</option>
+      <option value="SPICY AGEHA">SPICY AGEHA</option>
+      <option value="その他">その他</option>
+    </select>
+
+  </div>
+
+  <button class="main-button" onclick="showScreen('listScreen')">
+    🃏 カード一覧を見る
+  </button>
+
 </div>
 
-<input
-  id="cardName"
-  type="text"
-  placeholder="カード名"
->
 
-<select id="cardSeries">
-  <option value="第1弾">第1弾</option>
-  <option value="第2弾">第2弾</option>
-  <option value="第3弾">第3弾</option>
-</select>
+<!-- ========================= -->
+<!-- カード一覧画面 -->
+<!-- ========================= -->
 
-<select id="cardKind">
-  <option value="通常">通常</option>
-  <option value="プロモ">プロモ</option>
-</select>
+<div id="listScreen" class="screen">
 
-<select id="cardType">
-  <option value="">タイプを選択</option>
-  <option value="キュート">キュート</option>
-  <option value="クール">クール</option>
-  <option value="セクシー">セクシー</option>
-  <option value="ポップ">ポップ</option>
-</select>
+  <button class="back-button" onclick="showScreen('searchScreen')">
+    ← 検索に戻る
+  </button>
 
-<select id="cardBrand">
-  <option value="">ブランドを選択</option>
+  <h2>🃏 カード一覧</h2>
 
-  <option value="Dreamy Crowm">
-    Dreamy Crowm
-  </option>
+  <button class="add-button" onclick="showScreen('addScreen')">
+    ＋ カードを追加する
+  </button>
 
-  <option value="Maple Ribbon">
-    Maple Ribbon
-  </option>
+  <div id="cardCount" class="count"></div>
 
-  <option value="Angery Sugar">
-    Angery Sugar
-  </option>
+  <div id="cardList" class="card-list"></div>
 
-  <option value="FUTURING GIRL">
-    FUTURING GIRL
-  </option>
-
-  <option value="SPICY AGEHA">
-    SPICY AGEHA
-  </option>
-
-  <option value="その他">
-    その他
-  </option>
-</select>
-
-<select id="cardRarity">
-
-  <option value="">
-    レア度を選択
-  </option>
-
-  <option value="ER">
-    ✨ ER
-  </option>
-
-  <option value="PR">
-    💗 PR
-  </option>
-
-  <option value="R">
-    🌟 R
-  </option>
-
-  <option value="N">
-    🤍 N
-  </option>
-
-</select>
-
-<button
-  class="primary"
-  onclick="addCard()"
->
-カードを登録する ♡
-</button>
-
-</section>
+</div>
 
 
-<section class="panel">
+<!-- ========================= -->
+<!-- カード追加画面 -->
+<!-- ========================= -->
 
-<h2>🔎 カードを検索</h2>
+<div id="addScreen" class="screen">
 
-<input
-  id="search"
-  type="text"
-  placeholder="カード名・ブランドなどで検索"
-  oninput="renderCards()"
->
+  <button class="back-button" onclick="showScreen('listScreen')">
+    ← カード一覧に戻る
+  </button>
 
-<select
-  id="filterBrand"
-  onchange="renderCards()"
->
+  <h2>＋ カードを追加</h2>
 
-<option value="">
-すべてのブランド
-</option>
+  <div class="form-box">
 
-<option>Dreamy Crowm</option>
-<option>Maple Ribbon</option>
-<option>Angery Sugar</option>
-<option>FUTURING GIRL</option>
-<option>SPICY AGEHA</option>
-<option>その他</option>
+    <label>カード画像</label>
 
-</select>
+    <input
+      type="file"
+      id="cardImage"
+      accept="image/*"
+      onchange="previewImage()"
+    >
 
-<select
-  id="filterRarity"
-  onchange="renderCards()"
->
+    <img id="imagePreview" class="preview">
 
-<option value="">
-すべてのレア度
-</option>
+    <label>カード名</label>
+    <input
+      type="text"
+      id="cardName"
+      placeholder="カード名を入力"
+    >
 
-<option value="ER">ER</option>
-<option value="PR">PR</option>
-<option value="R">R</option>
-<option value="N">N</option>
+    <label>弾</label>
+    <select id="cardSeries">
+      <option value="第1弾">第1弾</option>
+    </select>
 
-</select>
+    <label>通常 or プロモ</label>
+    <select id="cardKind">
+      <option value="通常">通常</option>
+      <option value="プロモ">プロモ</option>
+    </select>
 
-</section>
+    <label>レア度</label>
+    <select id="cardRarity">
+      <option value="ER">ER</option>
+      <option value="PR">PR</option>
+      <option value="R">R</option>
+      <option value="N">N</option>
+    </select>
 
+    <label>タイプ</label>
+    <select id="cardType">
+      <option value="キュート">キュート</option>
+      <option value="クール">クール</option>
+      <option value="セクシー">セクシー</option>
+      <option value="ポップ">ポップ</option>
+    </select>
 
-<section class="panel">
+    <label>ブランド</label>
+    <select id="cardBrand">
+      <option value="Dreamy Crowm">Dreamy Crowm</option>
+      <option value="Maple Ribbon">Maple Ribbon</option>
+      <option value="Angery Sugar">Angery Sugar</option>
+      <option value="FUTURING GIRL">FUTURING GIRL</option>
+      <option value="SPICY AGEHA">SPICY AGEHA</option>
+      <option value="その他">その他</option>
+    </select>
 
-<h2>🃏 カード一覧</h2>
+    <button class="main-button" onclick="addCard()">
+      💗 カードを登録する
+    </button>
 
-<div
-  id="cardList"
-  class="cards"
-></div>
+  </div>
 
-</section>
-
-</main>
+</div>
 
 
 <script>
 
-let cards = JSON.parse(
-  localStorage.getItem("aikatsuCards") || "[]"
-);
+let cards = JSON.parse(localStorage.getItem("aikatsuCards")) || [];
 
 let selectedImage = "";
 
 
-/* レア度の順番 */
+// =========================
+// 画面切り替え
+// =========================
 
-const rarityOrder = {
-  ER: 1,
-  PR: 2,
-  R: 3,
-  N: 4
-};
+function showScreen(screenId) {
+
+  document.querySelectorAll(".screen").forEach(screen => {
+    screen.classList.remove("active");
+  });
+
+  document.getElementById(screenId).classList.add("active");
+
+  if (screenId === "listScreen") {
+    displayCards();
+  }
+
+}
 
 
-/* 画像を選んだとき */
+// =========================
+// 画像プレビュー
+// =========================
 
 function previewImage() {
 
-  const file =
-    document.getElementById("cardImage")
-      .files[0];
+  const file = document.getElementById("cardImage").files[0];
 
-  if (!file) return;
-
-  const reader =
-    new FileReader();
-
-  reader.onload = function(e) {
-
-    selectedImage =
-      e.target.result;
-
-    document.getElementById(
-      "imagePreview"
-    ).innerHTML =
-      `<img src="${selectedImage}">`;
-  };
-
-  reader.readAsDataURL(file);
-}
-
-
-/* 保存 */
-
-function saveCards() {
-
-  localStorage.setItem(
-    "aikatsuCards",
-    JSON.stringify(cards)
-  );
-}
-
-
-/* カード登録 */
-
-function addCard() {
-
-  const name =
-    document
-      .getElementById("cardName")
-      .value
-      .trim();
-
-  if (!name) {
-
-    alert(
-      "カード名を入力してね！"
-    );
-
+  if (!file) {
+    selectedImage = "";
+    document.getElementById("imagePreview").style.display = "none";
     return;
   }
 
+  const reader = new FileReader();
+
+  reader.onload = function(e) {
+
+    selectedImage = e.target.result;
+
+    const preview = document.getElementById("imagePreview");
+
+    preview.src = selectedImage;
+    preview.style.display = "block";
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+// =========================
+// カード追加
+// =========================
+
+function addCard() {
+
+  const name = document.getElementById("cardName").value.trim();
+
+  if (!name) {
+    alert("カード名を入力してください！");
+    return;
+  }
 
   const card = {
 
@@ -455,287 +477,80 @@ function addCard() {
 
     name: name,
 
-    series:
-      document
-        .getElementById("cardSeries")
-        .value,
+    series: document.getElementById("cardSeries").value,
 
-    kind:
-      document
-        .getElementById("cardKind")
-        .value,
+    kind: document.getElementById("cardKind").value,
 
-    type:
-      document
-        .getElementById("cardType")
-        .value,
+    rarity: document.getElementById("cardRarity").value,
 
-    brand:
-      document
-        .getElementById("cardBrand")
-        .value,
+    type: document.getElementById("cardType").value,
 
-    rarity:
-      document
-        .getElementById("cardRarity")
-        .value,
+    brand: document.getElementById("cardBrand").value,
 
-    image:
-      selectedImage,
+    image: selectedImage,
 
     quantity: 0
-  };
 
+  };
 
   cards.push(card);
 
   saveCards();
 
+  alert("カードを登録しました！💗");
 
-  document
-    .getElementById("cardName")
-    .value = "";
+  resetForm();
 
-  document
-    .getElementById("cardImage")
-    .value = "";
+  showScreen("listScreen");
 
-  selectedImage = "";
-
-  document.getElementById(
-    "imagePreview"
-  ).innerHTML =
-    "画像を選択してね♡";
-
-
-  renderCards();
 }
 
 
-/* 所持数変更 */
+// =========================
+// 保存
+// =========================
 
-function changeQuantity(
-  id,
-  amount
-) {
+function saveCards() {
 
-  const card =
-    cards.find(
-      c => c.id === id
-    );
-
-  if (!card) return;
-
-  card.quantity += amount;
-
-  if (card.quantity < 0) {
-    card.quantity = 0;
-  }
-
-  saveCards();
-
-  renderCards();
-}
-
-
-/* カード一覧 */
-
-function renderCards() {
-
-  const list =
-    document.getElementById(
-      "cardList"
-    );
-
-
-  const search =
-    document
-      .getElementById("search")
-      .value
-      .toLowerCase();
-
-
-  const brand =
-    document
-      .getElementById("filterBrand")
-      .value;
-
-
-  const rarity =
-    document
-      .getElementById("filterRarity")
-      .value;
-
-
-  let filtered =
-    cards.filter(card => {
-
-      const text =
-        (
-          card.name +
-          card.series +
-          card.kind +
-          card.type +
-          card.brand +
-          card.rarity
-        ).toLowerCase();
-
-
-      return (
-
-        text.includes(search) &&
-
-        (
-          !brand ||
-          card.brand === brand
-        ) &&
-
-        (
-          !rarity ||
-          card.rarity === rarity
-        )
-
-      );
-
-    });
-
-
-  /* ER → PR → R → N */
-
-  filtered.sort(
-    (a, b) =>
-      (rarityOrder[a.rarity] || 99) -
-      (rarityOrder[b.rarity] || 99)
+  localStorage.setItem(
+    "aikatsuCards",
+    JSON.stringify(cards)
   );
 
-
-  if (
-    filtered.length === 0
-  ) {
-
-    list.innerHTML =
-      `
-      <div class="empty">
-        まだカードが登録されていません♡
-      </div>
-      `;
-
-    return;
-  }
+}
 
 
-  list.innerHTML =
-    filtered.map(card => `
+// =========================
+// カード表示
+// =========================
 
-      <div class="card">
+function displayCards() {
 
-        <div class="card-image">
+  const list = document.getElementById("cardList");
 
-          ${
-            card.image
+  if (!list) return;
 
-            ?
+  const searchName =
+    document.getElementById("searchName").value
+      .toLowerCase();
 
-            `<img src="${card.image}">`
+  const searchSeries =
+    document.getElementById("searchSeries").value;
 
-            :
+  const searchKind =
+    document.getElementById("searchKind").value;
 
-            `📷<br>画像なし`
-          }
+  const searchRarity =
+    document.getElementById("searchRarity").value;
 
-        </div>
+  const searchType =
+    document.getElementById("searchType").value;
 
-
-        <div class="card-info">
-
-          <div class="card-name">
-
-            ${escapeHTML(
-              card.name
-            )}
-
-          </div>
+  const searchBrand =
+    document.getElementById("searchBrand").value;
 
 
-          <div class="tags">
+  const filteredCards = cards.filter(card => {
 
-            ${
-              card.rarity
-              ?
-              `<span class="tag">
-                ✨ ${card.rarity}
-              </span>`
-              :
-              ""
-            }
-
-
-            ${
-              card.series
-              ?
-              `<span class="tag">
-                🗂️ ${card.series}
-              </span>`
-              :
-              ""
-            }
-
-
-            ${
-              card.type
-              ?
-              `<span class="tag">
-                🎀 ${card.type}
-              </span>`
-              :
-              ""
-            }
-
-
-            ${
-              card.brand
-              ?
-              `<span class="tag">
-                🏷️ ${card.brand}
-              </span>`
-              :
-              ""
-            }
-
-
-            <span class="tag">
-              ${card.kind}
-            </span>
-
-          </div>
-
-
-          <div class="quantity">
-
-            <button
-              onclick="changeQuantity(
-                ${card.id},
-                -1
-              )"
-            >
-              −
-            </button>
-
-
-            <strong>
-              ${card.quantity}枚
-            </strong>
-
-
-            <button
-              onclick="changeQuantity(
-                ${card.id},
-                1
-              )"
-            >
-              ＋
-            </button>
-
-          </div>
-
-   
+    const nameMatch =
+      card.name.toLowerCase().inclu
