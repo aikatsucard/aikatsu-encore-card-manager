@@ -448,6 +448,64 @@ input[type="range"] {
   color: #555;
   cursor: pointer;
 } 
+
+/* カード詳細画面 */
+
+.card-detail {
+  position: relative;
+  width: 100%;
+  max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: #ffffff;
+  border: 1px solid #e6dce5;
+  border-radius: 16px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.card-detail img {
+  display: block;
+  width: 100%;
+  max-height: 55vh;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 24px;
+}
+
+.card-detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee7ed;
+}
+
+.detail-label {
+  color: #888;
+  flex-shrink: 0;
+}
+
+.detail-row span:last-child {
+  text-align: right;
+  color: #444;
+  word-break: break-word;
+}
+
+.detail-note {
+  align-items: flex-start;
+}
+
+.card-detail .delete-button {
+  width: 100%;
+  margin-top: 24px;
+}
   
 </style>
 </head>
@@ -681,6 +739,16 @@ input[type="range"] {
         </select>
       </div>
 
+            <div class="form-group">
+        <label>備考</label>
+
+        <textarea
+          id="cardNote"
+          rows="4"
+          placeholder="自由に入力できます"
+        ></textarea>
+      </div>
+      
       <button class="primary-button" onclick="addCard()">
         このカードを登録する
       </button>
@@ -1124,6 +1192,9 @@ function addCard() {
   const brand =
     document.getElementById("cardBrand").value;
 
+  const note =
+  document.getElementById("cardNote").value.trim();
+
   if (!number) {
     alert("カード番号を入力してください！");
     return;
@@ -1189,6 +1260,8 @@ function addCard() {
 
       brand: brand,
 
+      note: note,
+
       image: imageData || "",
 
       quantity: 0
@@ -1210,6 +1283,7 @@ function addCard() {
     document.getElementById("cardRarity").value = "";
     document.getElementById("cardType").value = "";
     document.getElementById("cardBrand").value = "";
+    document.getElementById("cardNote").value = "";
 
     document.getElementById("imagePreview").innerHTML =
       "画像を選択すると、ここに表示されます。";
@@ -1404,7 +1478,7 @@ function createCardHTML(card) {
     ? `<img
          src="${card.image}"
          alt="${card.name}"
-         onclick="openImageModal('${card.image}')"
+         onclick="openImageModal(${card.id})"
        >`
     : `<div class="no-image">画像なし</div>`;
 
@@ -1853,11 +1927,50 @@ if (cardImageInput) {
 
 showScreen("homeScreen");
 
-function openImageModal(imageSrc) {
+function openImageModal(cardId) {
+
+  const card = cards.find(card => card.id === cardId);
+
+  if (!card) return;
+
   const modal = document.getElementById("imageModal");
   const modalImage = document.getElementById("modalImage");
 
-  modalImage.src = imageSrc;
+  const detailNumber =
+    document.getElementById("detailNumber");
+
+  const detailName =
+    document.getElementById("detailName");
+
+  const detailRarity =
+    document.getElementById("detailRarity");
+
+  const detailType =
+    document.getElementById("detailType");
+
+  const detailBrand =
+    document.getElementById("detailBrand");
+
+  const detailNote =
+    document.getElementById("detailNote");
+
+  modalImage.src = card.image || "";
+
+  detailNumber.textContent = card.number;
+  detailName.textContent = card.name;
+  detailRarity.textContent = card.rarity;
+  detailType.textContent = card.type;
+  detailBrand.textContent = card.brand;
+  detailNote.textContent = card.note || "なし";
+
+  const deleteButton =
+    document.getElementById("detailDeleteButton");
+
+  deleteButton.onclick = function () {
+    closeImageModal();
+    deleteCard(card.id);
+  };
+
   modal.classList.add("active");
 }
 
@@ -1867,20 +1980,79 @@ function closeImageModal() {
 
   modal.classList.remove("active");
   modalImage.src = "";
+
+  document.getElementById("detailNumber").textContent = "";
+  document.getElementById("detailName").textContent = "";
+  document.getElementById("detailRarity").textContent = "";
+  document.getElementById("detailType").textContent = "";
+  document.getElementById("detailBrand").textContent = "";
+  document.getElementById("detailNote").textContent = "";
 }
   
 </script>
 
 <div id="imageModal" class="image-modal">
-  <button
-    type="button"
-    class="image-modal-close"
-    onclick="closeImageModal()"
-  >
-    ×
-  </button>
 
-  <img id="modalImage" src="" alt="カード画像">
+  <div class="card-detail">
+
+    <button
+      type="button"
+      class="image-modal-close"
+      onclick="closeImageModal()"
+    >
+      ×
+    </button>
+
+    <img
+      id="modalImage"
+      src=""
+      alt="カード画像"
+    >
+
+    <div class="card-detail-info">
+
+      <div class="detail-row">
+        <span class="detail-label">カード番号</span>
+        <span id="detailNumber"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">カード名</span>
+        <span id="detailName"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">レア度</span>
+        <span id="detailRarity"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">タイプ</span>
+        <span id="detailType"></span>
+      </div>
+
+      <div class="detail-row">
+        <span class="detail-label">ブランド</span>
+        <span id="detailBrand"></span>
+      </div>
+
+      <div class="detail-row detail-note">
+        <span class="detail-label">備考</span>
+        <span id="detailNote"></span>
+      </div>
+
+    </div>
+
+    <button
+      type="button"
+      id="detailDeleteButton"
+      class="delete-button"
+    >
+      このカードを削除
+    </button>
+
+  </div>
+
 </div>
   
 </body>
