@@ -1400,9 +1400,13 @@ function createCardHTML(card) {
       : "";
 
   const imageHTML =
-    card.image
-      ? `<img src="${card.image}" alt="${card.name}">`
-      : `<div class="no-image">画像なし</div>`;
+  card.image
+    ? `<img
+         src="${card.image}"
+         alt="${card.name}"
+         onclick="openImageModal('${card.image}')"
+       >`
+    : `<div class="no-image">画像なし</div>`;
 
   return `
     <div class="card-item ${unownedClass}">
