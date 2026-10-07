@@ -411,6 +411,44 @@ input[type="range"] {
   letter-spacing: 0.02em;
 }
 
+/* カード画像拡大表示 */
+.image-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(255, 255, 255, 0.96);
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.image-modal.active {
+  display: flex;
+}
+
+.image-modal img {
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
+.image-modal-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid #d8cfd6;
+  border-radius: 50%;
+  background: #ffffff;
+  font-size: 24px;
+  line-height: 1;
+  color: #555;
+  cursor: pointer;
+} 
+  
 </style>
 </head>
 
@@ -1811,7 +1849,35 @@ if (cardImageInput) {
 
 showScreen("homeScreen");
 
+function openImageModal(imageSrc) {
+  const modal = document.getElementById("imageModal");
+  const modalImage = document.getElementById("modalImage");
+
+  modalImage.src = imageSrc;
+  modal.classList.add("active");
+}
+
+function closeImageModal() {
+  const modal = document.getElementById("imageModal");
+  const modalImage = document.getElementById("modalImage");
+
+  modal.classList.remove("active");
+  modalImage.src = "";
+}
+  
 </script>
 
+<div id="imageModal" class="image-modal">
+  <button
+    type="button"
+    class="image-modal-close"
+    onclick="closeImageModal()"
+  >
+    ×
+  </button>
+
+  <img id="modalImage" src="" alt="カード画像">
+</div>
+  
 </body>
 </html>
